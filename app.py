@@ -1,5 +1,5 @@
 from flask import (
-    Flask, render_template, flash, redirect, url_for, session, logging)
+    Flask, render_template, flash, redirect, url_for, request, session, logging)
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -35,12 +35,12 @@ def about():
 class RegistrationForm(Form):
     name = StringField('Name', validators=[
                        validators.input_required(), validators.Length(min=2, max=50)])
-    username = StringField('username', validators=[
+    username = StringField('username', [
         validators.input_required(), validators.Length(min=2, max=50)])
-    email = StringField('username', validators=[
+    email = StringField('email', [
         validators.input_required(), validators.Length(min=2, max=50)])
     password = PasswordField('password', [validators.DataRequired(
-    ), validators.EqualTo('confirmpassword', message='password do not match ')])
+    ), validators.EqualTo('confirm', message='password do not match ')])
     confirmpassword = PasswordField('confirm password')
 
 
