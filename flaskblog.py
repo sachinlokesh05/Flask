@@ -1,56 +1,56 @@
-from flask import (
-    Flask, render_template, flash, redirect, url_for, session, logging)
-from flask_mysqldb import MySQL
-from wtforms import Form, StringField, PasswordField, validators
-from passlib.hash import sha256_crypt
-app = Flask(__name__)
+# from flask import (
+#     Flask, render_template, flash, redirect, url_for, session, logging)
+# from flask_mysqldb import MySQL
+# from wtforms import Form, StringField, PasswordField, validators
+# from passlib.hash import sha256_crypt
+# app = Flask(__name__)
 
-posts = [
-    {
-        'author': 'sachin',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'Jan 11, 2020'
-    },
-    {
-        'author': 'lokesh',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'Jan 10, 2020'
-    }
-]
-
-
-@app.route("/")
-@app.route("/home")
-def home():
-    return render_template('home.html', posts=posts)
+# posts = [
+#     {
+#         'author': 'sachin',
+#         'title': 'Blog Post 1',
+#         'content': 'First post content',
+#         'date_posted': 'Jan 11, 2020'
+#     },
+#     {
+#         'author': 'lokesh',
+#         'title': 'Blog Post 2',
+#         'content': 'Second post content',
+#         'date_posted': 'Jan 10, 2020'
+#     }
+# ]
 
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')
+# @app.route("/")
+# @app.route("/home")
+# def home():
+#     return render_template('home.html', posts=posts)
 
 
-class RegistrationForm(Form):
-    name = StringField('Name', validators=[
-                       validators.input_required(), validators.Length(min=2, max=50)])
-    username = StringField('username', validators=[
-        validators.input_required(), validators.Length(min=2, max=50)])
-    email = StringField('username', validators=[
-        validators.input_required(), validators.Length(min=2, max=50)])
-    password = PasswordField('password', [validators.DataRequired(
-    ), validators.EqualTo('confirmpassword', message='password do not match ')])
-    confirmpassword = PasswordField('confirm password')
+# @app.route("/about")
+# def about():
+#     return render_template('about.html', title='About')
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        return render_template('register.html')
-    return render_template('register.html', form=form)
+# class RegistrationForm(Form):
+#     name = StringField('Name', validators=[
+#                        validators.input_required(), validators.Length(min=2, max=50)])
+#     username = StringField('username', validators=[
+#         validators.input_required(), validators.Length(min=2, max=50)])
+#     email = StringField('username', validators=[
+#         validators.input_required(), validators.Length(min=2, max=50)])
+#     password = PasswordField('password', [validators.DataRequired(
+#     ), validators.EqualTo('confirmpassword', message='password do not match ')])
+#     confirmpassword = PasswordField('confirm password')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     form = RegistrationForm(request.form)
+#     if request.method == 'POST' and form.validate():
+#         return render_template('register.html')
+#     return render_template('register.html', form=form)
+
+
+# if __name__ == '__main__':
+#     app.run(debug=True)

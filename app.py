@@ -5,6 +5,16 @@ from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 app = Flask(__name__)
 
+# config MySQL
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_DB'] = 'myflaskapp'
+app.config['MYSQL_CURSORCLASS'] = 'Dictcursor'
+
+# mysql __init_
+mysql = MySQL(app)
+
 posts = [
     {
         'author': 'sachin',
@@ -40,7 +50,7 @@ class RegistrationForm(Form):
     email = StringField('email', [
         validators.input_required(), validators.Length(min=2, max=50)])
     password = PasswordField('password', [validators.DataRequired(
-    ), validators.EqualTo('confirm', message='password do not match ')])
+    ), validators.EqualTo('confirmpassword', message='password do not match ')])
     confirmpassword = PasswordField('confirm password')
 
 
