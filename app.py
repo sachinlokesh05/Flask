@@ -56,6 +56,12 @@ class RegistrationForm(Form):
     confirmpassword = PasswordField('confirm password')
 
 
+class LoginForm(Form):
+    email = StringField('email', [
+        validators.input_required(), validators.Length(min=2, max=50)])
+    password = PasswordField('password', [validators.DataRequired()])
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
@@ -88,6 +94,12 @@ def register():
                 'Your account has been activated successfully. You can now login.', 'success')
             return redirect(url_for('home'))
     return render_template('register.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    return render_template('login.html', form=form)
 
 
 if __name__ == '__main__':
