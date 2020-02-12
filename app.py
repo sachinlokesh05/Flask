@@ -67,20 +67,29 @@ def register():
 
         # create cursor
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO users(name,email,username,password) VALUES(%s, %s, %s, %s)",
-                    (name, email, username, password))
+        new_value = cur.execute(
+            "SELECT * FROM users where email LIKE %s or username LIKE %s ", [email, username])
+        mysql.connection.commit()
+        if new_value > 0:
+            flash(
+                'email or username address already exists.', 'warning')
+            return redirect(url_for('register'))
+        else:
+            cur.execute("INSERT INTO users(name,email,username,password) VALUES(%s, %s, %s, %s)",
+                        (name, email, username, password))
 
         # commit to DB
-        mysql.connection.commit()
+            mysql.connection.commit()
 
         # close connection
-        cur.close()
+            cur.close()
 
-        flash('your succesfully registred,now you can login', 'success')
-        redirect(url_for('home'))
+            flash(
+                'Your account has been activated successfully. You can now login.', 'success')
+            return redirect(url_for('home'))
     return render_template('register.html', form=form)
 
 
 if __name__ == '__main__':
-    app.secret_key = 'secret12345'
+    app.secret_key = 'rslh0758a9ztg!c(u9xo=p$snvrf=3wllxx01qev9%s^rra5dl'
     app.run(debug=True)
