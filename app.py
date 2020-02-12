@@ -10,7 +10,9 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_DB'] = 'myflaskapp'
-app.config['MYSQL_CURSORCLASS'] = 'Dictcursor'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['SECRET_KEY'] = 'redsfsfsfsfis'
+
 
 # mysql __init_
 mysql = MySQL(app)
@@ -58,9 +60,27 @@ class RegistrationForm(Form):
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        return render_template('register.html')
+        name = form.name.data
+        username = form.username.data
+        email = form.email.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        # create cursor
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO users(name,email,username,password) VALUES(%s, %s, %s, %s)",
+                    (name, email, username, password))
+
+        # commit to DB
+        mysql.connection.commit()
+
+        # close connection
+        cur.close()
+
+        flash('your succesfully registred,now you can login', 'success')
+        redirect(url_for('home'))
     return render_template('register.html', form=form)
 
 
 if __name__ == '__main__':
+    app.secret_key = 'secret12345'
     app.run(debug=True)
