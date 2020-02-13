@@ -57,7 +57,7 @@ class RegistrationForm(Form):
 
 
 class LoginForm(Form):
-    email = StringField('email', [
+    username = StringField('username', [
         validators.input_required(), validators.Length(min=2, max=50)])
     password = PasswordField('password', [validators.DataRequired()])
 
@@ -73,6 +73,7 @@ def register():
 
         # create cursor
         cur = mysql.connection.cursor()
+
         new_value = cur.execute(
             "SELECT * FROM users where email LIKE %s or username LIKE %s ", [email, username])
         mysql.connection.commit()
@@ -99,7 +100,52 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        username = form.username.data
+        password = form.password.data
+
+        # create cursor
+        cur = mysql.connection.cursor()
+
+        # Get user by email
+        result = cur.execute(
+            "SELECT * FROM users WHERE username = %s", [username])
+
+        if result > 0:
+            data = cur.fetchone()
+            current_password = data['password']
+            username = data['username']
+
+            if sha256_crypt.verify(password, current_password):
+
+                # compere password
+                session['logged_in'] = True
+                session['username'] = username
+                flash('You are now logged in', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('password is incorrect', 'danger')
+                return redirect(url_for('login'))
+
+            # close connection
+            cur.close()
+        else:
+            flash('user not found', 'danger')
+            return redirect(url_for('login'))
+
     return render_template('login.html', form=form)
+
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    return render_template('dashboard.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('your are now logged out', 'success')
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
