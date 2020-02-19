@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
 
     {% if title %}
         <title>Flask Blog - {{ title }}</title>
@@ -18,24 +20,25 @@
 </head>
 <body>
     <header class="site-header">
-      <nav style="color: black;" class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <nav style="border-radius: 10px;" class="rounded-pill p-2 navbar navbar-expand-md navbar-dark bg-white text-white  fixed-top border-bottom border-grey">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/">Flask Blog</a>
+          <a class="navbar-brand mr-4 text-dark" href="/">FundooNotes</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="collapse navbar-collapse " id="navbarToggle" >
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="/">Home</a>
-              <a class="nav-item nav-link" href="/about">About</a>
+              <a class="nav-item nav-link text-dark" href="/">Home</a>
+              <a class="nav-item nav-link text-dark" href="/about">About</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if session.logged_in %}
-              <a class="nav-item nav-link" href="/logout">Logout</a>
+              <a class="nav-item nav-link mr-4 text-dark">{{session.username|upper}}</a>
+              <a class="nav-item nav-link text-dark" href="/logout">Logout</a>
               {% else %}
-              <a class="nav-item nav-link" href="/login">Login</a>
-              <a class="nav-item nav-link" href="/register">Register</a>
+              <a class="nav-item nav-link text-dark" href="/login">Login</a>
+              <a class="nav-item nav-link text-dark" href="/register">Register</a>
               {% endif %}
             </div>
           </div>
